@@ -74,7 +74,7 @@ COMP="gzip"
 CLEANUP="yes"
 
 # Additionally keep a copy of the most recent backup in a seperate directory.
-LATEST="yes"
+LATEST="no"
 
 # Command to run before backups (uncomment to use)
 #PREBACKUP="/etc/mysql-backup-pre"
@@ -218,15 +218,15 @@ if [ ! -e "$BACKUPDIR/daily" ]		# Check Daily Directory exists.
 	mkdir -p "$BACKUPDIR/daily"
 fi
 
-if [ ! -e "$BACKUPDIR/weekly" ]		# Check Weekly Directory exists.
-	then
-	mkdir -p "$BACKUPDIR/weekly"
-fi
+#if [ ! -e "$BACKUPDIR/weekly" ]		# Check Weekly Directory exists.
+#	then
+#	mkdir -p "$BACKUPDIR/weekly"
+#fi
 
-if [ ! -e "$BACKUPDIR/monthly" ]	# Check Monthly Directory exists.
-	then
-	mkdir -p "$BACKUPDIR/monthly"
-fi
+#if [ ! -e "$BACKUPDIR/monthly" ]	# Check Monthly Directory exists.
+#	then
+#	mkdir -p "$BACKUPDIR/monthly"
+#fi
 
 if [ "$LATEST" = "yes" ]
 then
@@ -311,33 +311,33 @@ echo ======================================================================
 echo Backup Start `date`
 echo ======================================================================
 	# Monthly Full Backup of all Databases
-	if [ $DOM = "01" ]; then
-		echo Monthly Full Backup
-		  dbdump "$BACKUPDIR/monthly/$DATE.$M"
-		  compression "$BACKUPDIR/monthly/" "$DATE.$M"
-		echo ----------------------------------------------------------------------
-	fi
+#	if [ $DOM = "01" ]; then
+#		echo Monthly Full Backup
+#		  dbdump "$BACKUPDIR/monthly/$DATE.$M"
+#		  compression "$BACKUPDIR/monthly/" "$DATE.$M"
+#		echo ----------------------------------------------------------------------
+#	fi
 
 	# Weekly Backup
-	if [ $DNOW = $DOWEEKLY ]; then
-		echo Weekly Backup
-		echo
-		echo Rotating 5 weeks Backups...
-			if [ "$W" -le 05 ];then
-				REMW=`expr 48 + $W`
-			elif [ "$W" -lt 15 ];then
-				REMW=0`expr $W - 5`
-			else
-				REMW=`expr $W - 5`
-			fi
-		eval rm -fv "$BACKUPDIR/weekly/week.$REMW.*" 
-		echo
-			dbdump "$BACKUPDIR/weekly/week.$W.$DATE"
-			compression "$BACKUPDIR/weekly/" "week.$W.$DATE"
-		echo ----------------------------------------------------------------------
+#	if [ $DNOW = $DOWEEKLY ]; then
+#		echo Weekly Backup
+#		echo
+#		echo Rotating 5 weeks Backups...
+#			if [ "$W" -le 05 ];then
+#				REMW=`expr 48 + $W`
+#			elif [ "$W" -lt 15 ];then
+#				REMW=0`expr $W - 5`
+#			else
+#				REMW=`expr $W - 5`
+#			fi
+#		eval rm -fv "$BACKUPDIR/weekly/week.$REMW.*" 
+#		echo
+#			dbdump "$BACKUPDIR/weekly/week.$W.$DATE"
+#			compression "$BACKUPDIR/weekly/" "week.$W.$DATE"
+#		echo ----------------------------------------------------------------------
 		
 	# Daily Backup
-	else
+#	else
 		echo Daily Backup of Databases
 		echo
 		echo Rotating last weeks Backup...
@@ -346,7 +346,7 @@ echo ======================================================================
 			dbdump "$BACKUPDIR/daily/$DATE.$DOW"
 			compression "$BACKUPDIR/daily/" "$DATE.$DOW"
 		echo ----------------------------------------------------------------------
-	fi
+#	fi
 echo Backup End Time `date`
 echo ======================================================================
 
